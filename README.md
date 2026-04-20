@@ -1,31 +1,18 @@
-name=README.md url=https://github.com/Smylann/vizsgaprojekt_public
-
 # Hawktual – A Modern Social News Platform
 
-> A fully-featured social news platform where users can share content, discuss topics by category, vote on posts, and moderate community content. **Available on Web, iOS, Android, and Desktop.**
+> A fully-featured social news platform where users can share content, discuss topics by category, vote on posts, and moderate community content. **Available on Web and Android**
 
 ---
 
-## 🎯 What is Reddit 2?
+## 🎯 What is Hawktual?
 
-**Reddit 2** is a complete social news and discussion platform inspired by Reddit. Users create accounts, post content to categorized forums, engage with others through comments, and collectively determine what's important through upvoting and downvoting. Moderators and admins maintain community standards through content management and user moderation tools.
-
-Built with a modern tech stack, Reddit 2 is **available across all major platforms**—use it on your phone, tablet, desktop, or web browser with a seamless, native experience on each platform.
+**Hawktual** is a complete social news and discussion platform inspired by Reddit. Users create accounts, post content to categorized forums, engage with others through comments, and collectively determine what's important through upvoting and downvoting. Moderators and admins maintain community safety through content management and user moderation tools.
 
 ---
 
-## 📱 Multi-Platform Availability
-
-### 🌐 Web Application
-- Full-featured responsive web interface
-- Works in all modern browsers
-- Perfect for desktop and mobile browsers
-
-### 📲 Native Mobile Apps
-- **iOS** – Native app for iPhone and iPad
+### 📲 Native Mobile App
 - **Android** – Native app for Android phones and tablets
-- **Desktop** – Standalone applications for Windows and macOS
-- Built with **.NET MAUI** – Single codebase, native performance on every platform
+- Built with **.NET Avalonia UI** – Single codebase, native performance on every platform
 
 All platforms share the same backend API and offer identical functionality with platform-optimized user interfaces.
 
@@ -64,8 +51,8 @@ All platforms share the same backend API and offer identical functionality with 
 - **Report Tracking** – Reports can be marked as "Open", "Closed (not deleted)", or "Closed (deleted)"
 
 ### 🎨 User Experience
-- **Platform-Optimized UI** – Native look and feel on iOS, Android, Desktop, and Web
-- **Dark/Light Theme** – Toggle between Catppuccin-inspired dark and light modes
+- **Platform-Optimized UI** – Native look and feel on Android and Web
+- **Dark/Light Theme** – Toggle between Catppuccin-inspired dark and light modes on web, and adjust the brightness with a slider in the Android app! (5 times the charm)
 - **Real-time Validation** – Immediate feedback on form inputs (passwords, search, etc.)
 - **Toast Notifications** – Non-intrusive feedback for actions and errors
 - **Intuitive Navigation** – Sidebar categories, main feed, and user settings
@@ -75,7 +62,7 @@ All platforms share the same backend API and offer identical functionality with 
 ## 🏗️ Technical Architecture
 
 ### Backend (C# / ASP.NET Core)
-The backend runs as a RESTful API on **port 3070** with Swagger documentation:
+The backend runs as a RESTful API on **http://fcsab.ddns.net:3070**.
 
 **User Controller** – Authentication and account management
 - Registration
@@ -111,14 +98,9 @@ Modular vanilla JavaScript with Bootstrap 5:
 - Admin panel with tabbed moderation interface
 - User settings and profile management
 
-#### Mobile & Desktop (.NET MAUI / C#)
-Single codebase compiled to native apps:
+#### Mobile & Desktop (.NET Avalonia UI / C#)
+Single codebase compiled to:
 - **MobileVersion.Android** – Android native app
-- **MobileVersion.iOS** – iOS native app
-- **MobileVersion.Desktop** – Windows/macOS desktop app
-- **MobileVersion.Browser** – Web-based deployment option
-
-All MAUI projects share core logic while providing platform-specific UI optimizations.
 
 ### Database
 Relational database schema supporting:
@@ -160,10 +142,3 @@ Relational database schema supporting:
 3. **Admin Reviews** – Admin panel shows all open reports with reasons
 4. **Action Taken** – Admin deletes post or closes report
 5. **Status Updated** – Report marked "Closed (deleted)" or "Closed (not deleted)"
-
----
-
-## 🔧 Deployment
-
-### Web
-Backend API configured for **0.0.0.0:3070**, accessible via:
