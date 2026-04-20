@@ -1,6 +1,6 @@
 name=README.md url=https://github.com/Smylann/vizsgaprojekt_public
 
-# Reddit 2 – A Modern Social News Platform
+# Hawktual – A Modern Social News Platform
 
 > A fully-featured social news platform where users can share content, discuss topics by category, vote on posts, and moderate community content. **Available on Web, iOS, Android, and Desktop.**
 
