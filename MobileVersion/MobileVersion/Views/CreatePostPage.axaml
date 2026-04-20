@@ -1,0 +1,66 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MobileVersion.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="MobileVersion.CreatePostPage"
+			 x:DataType="vm:CreatePostVM">
+	<Grid>
+		<StackPanel Margin="20" Spacing="15">
+			<Grid ColumnDefinitions="*,*,*">
+				<Button Grid.Column="0" Command="{Binding CloseCommand}" Background="Transparent" BorderThickness="0" Foreground="GhostWhite" FontSize="18">
+						<Path Data="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" 
+                          Fill="White" 
+                          Width="18" Height="18" 
+                          Stretch="Uniform"/>
+					</Button>
+				<TextBlock Grid.Column="1" Text="Create New Post" TextAlignment="Center" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Foreground="Wheat" TextWrapping="Wrap"/>
+			</Grid>
+			<ComboBox Grid.Column="2" HorizontalAlignment="Stretch" ItemsSource="{Binding Cats}" SelectedItem="{Binding SelectedCategory}">
+				<ComboBox.ItemTemplate>
+					<DataTemplate><TextBlock Text="{Binding categoryname}"/></DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<TextBox Text="{Binding Title}" Watermark="Post Title" FontSize="18" Padding="10"/>
+			<TextBox Text="{Binding Content}" Watermark="What's on your mind?" FontSize="16" Padding="10" AcceptsReturn="True" Height="150"/>
+			<!-- Image Preview (only shows when HasImage is true) -->
+			<Border IsVisible="{Binding HasImage}"
+			        Background="#EDE8E0"
+			        CornerRadius="10"
+			        Padding="12"
+			        Margin="0,5,0,5">
+				<StackPanel Spacing="10">
+					<!-- Image preview -->
+					<Image Source="{Binding SelectedImageBitmap}"
+					       MaxHeight="200"
+					       Stretch="Uniform"
+					       HorizontalAlignment="Center"/>
+        
+					<!-- Remove button -->
+					<Button Content="✖ Remove Image"
+					        Command="{Binding RemoveImageCommand}"
+					        Background="#8B0000"
+					        Foreground="White"
+					        BorderThickness="0"
+					        CornerRadius="8"
+					        Padding="8"
+					        FontSize="13"
+					        HorizontalAlignment="Center"/>
+				</StackPanel>
+			</Border>
+			<Button Content="📷 Upload Image" 
+			        FontSize="16" 
+			        Padding="10"
+			        Command="{Binding BrowseImageCommand}"
+			        CommandParameter="{Binding $parent[TopLevel]}"
+			        Foreground="White" 
+			        BorderThickness="0" 
+			        Background="#C0622F"
+			        CornerRadius="8"/>
+
+			
+			<Button Content="Submit Post" FontSize="18" Padding="10" Command="{Binding CreatePostCommand}" Foreground="White" BorderThickness="0" Background="Transparent"/>
+		</StackPanel>
+	</Grid>
+</UserControl>

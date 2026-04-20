@@ -1,0 +1,123 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MobileVersion.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="700"
+             x:Class="MobileVersion.OwnPostsPage"
+             x:DataType="vm:OwnPostsVM">
+
+    <!-- UNIQUE GRADIENT BACKGROUND -->
+    <UserControl.Background>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Offset="0.0" Color="#1e3c72" />
+            <GradientStop Offset="1.0" Color="#2a5298" />
+        </LinearGradientBrush>
+    </UserControl.Background>
+
+    <UserControl.Styles>
+        <!-- Glass Post Card Style -->
+        <Style Selector="Border.PostCard">
+            <Setter Property="Background" Value="#20FFFFFF"/>
+            <Setter Property="BoxShadow" Value="0 4 15 0 #20000000"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- CUSTOM HEADER -->
+        <Border Grid.Row="0" Padding="15" Background="#15000000">
+            <Grid ColumnDefinitions="Auto, *">
+                <Button Grid.Column="0" 
+                        Command="{Binding CloseCommand}" 
+                        Background="Transparent" 
+                        BorderThickness="0"
+                        Padding="5">
+                    <Path Data="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" 
+                          Fill="White" 
+                          Width="24" Height="24" 
+                          Stretch="Uniform"/>
+                </Button>
+                
+                <StackPanel Grid.Column="1" Margin="15,0" VerticalAlignment="Center">
+                    <TextBlock Text="MY POSTS" 
+                               FontSize="10" 
+                               FontWeight="Bold" 
+                               Foreground="#B0FFFFFF" 
+                               LetterSpacing="2"/>
+                    <TextBlock Text="{Binding Username}" 
+                               FontSize="22" 
+                               FontWeight="SemiBold" 
+                               Foreground="White"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- POSTS LIST -->
+        <ScrollViewer Grid.Row="1" Name="PostsScroller" ScrollChanged="ScrollChanged">
+            <ItemsControl ItemsSource="{Binding OwnPosts}" Margin="20">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PostVM">
+                        <Button Classes="CardWrapper"
+                                Background="Transparent" 
+                                Padding="0" 
+                                BorderThickness="0"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding SelectCommand}">
+                            <Border Classes="PostCard" 
+                                    Margin="0,0,0,15" 
+                                    Padding="15" 
+                                    CornerRadius="15">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <!-- Post Content -->
+                                    <StackPanel Grid.Column="0" Spacing="4">
+                                        <TextBlock Text="{Binding Post.Title}" 
+                                                   FontWeight="Bold" 
+                                                   FontSize="16" 
+                                                   Foreground="White"/>
+                                        <TextBlock Text="{Binding Post.Content}"
+                                                   TextWrapping="Wrap" 
+                                                   MaxLines="2"
+                                                   Foreground="#D0FFFFFF" 
+                                                   FontSize="12"/>
+                                        <Border Background="#20000000" 
+                                                CornerRadius="4" 
+                                                Padding="6,2" 
+                                                HorizontalAlignment="Left" 
+                                                Margin="0,4,0,0">
+                                            <TextBlock Text="{Binding Votes, StringFormat='Your post is {0} points away from rock bottom!'}"
+                                                       FontSize="10" 
+                                                       Foreground="#FFD700"/>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <!-- Delete Button -->
+                                    <Button Grid.Column="1" 
+                                            Classes="DeleteButton"
+                                            Command="{Binding DeleteOwnPostCommand}" 
+                                            Content="✕" 
+                                            Foreground="#FF6B6B" 
+                                            FontSize="20" 
+                                            Width="40" Height="40"
+                                            CornerRadius="20"
+                                            Padding="0"
+                                            VerticalAlignment="Top"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="Transparent" 
+                                            BorderThickness="0"/>
+                                </Grid>
+                            </Border>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

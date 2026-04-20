@@ -1,0 +1,489 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:MobileVersion.ViewModels"
+			 xmlns:views="using:MobileVersion"
+			 mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="800"
+			 x:Class="MobileVersion.Views.MainView"
+			 x:DataType="vm:MainViewModel"
+			 Background="#F0F2F5">
+
+	<Design.DataContext>
+		<vm:MainViewModel />
+	</Design.DataContext>
+
+	<UserControl.Resources>
+		<CornerRadius x:Key="CardCornerRadius">16</CornerRadius>
+	</UserControl.Resources>
+
+	<UserControl.Styles>
+		<!-- Tab Styles -->
+		<Style Selector="TabItem">
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="MinHeight" Value="42"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#8A9BB0"/>
+			<Setter Property="Padding" Value="16,0"/>
+		</Style>
+
+		<Style Selector="TabItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="Foreground" Value="#E8A838" />
+		</Style>
+
+		<!-- CARDS POP-OUT EFFECT -->
+		<Style Selector="Button.CardButton">
+			<Setter Property="Transitions">
+				<Transitions>
+					<TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="CubicEaseOut"/>
+				</Transitions>
+			</Setter>
+			<Setter Property="RenderTransform" Value="scale(1.0)"/>
+		</Style>
+
+
+		<!-- FLOATING ACTION BUTTON (FAB) STYLE -->
+		<Style Selector="Button.FAB">
+			<Setter Property="Width" Value="58"/>
+			<Setter Property="Height" Value="58"/>
+			<Setter Property="CornerRadius" Value="29"/>
+			<Setter Property="Background" Value="#E8A838"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="FontSize" Value="28"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Transitions">
+				<Transitions>
+					<TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" Easing="CubicEaseOut"/>
+				</Transitions>
+			</Setter>
+		</Style>
+
+		<Style Selector="Button.RefreshBtn">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Padding" Value="8,4"/>
+			<Setter Property="Transitions">
+				<Transitions>
+					<TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" Easing="CubicEaseOut"/>
+				</Transitions>
+			</Setter>
+			<Setter Property="RenderTransform" Value="scale(1.0)"/>
+		</Style>
+
+	</UserControl.Styles>
+
+	<UserControl.DataTemplates>
+		<DataTemplate DataType="vm:LoginVM">
+			<Panel VerticalAlignment="Center" HorizontalAlignment="Center">
+				<views:LoginPage />
+			</Panel>
+		</DataTemplate>
+		<DataTemplate DataType="vm:PostVM">
+			<views:PostDetails />
+		</DataTemplate>
+		<DataTemplate DataType="vm:UserVM">
+			<views:UserDetails />
+		</DataTemplate>
+		<DataTemplate DataType="vm:AboutUsVM">
+			<views:AboutUsPage />
+		</DataTemplate>
+		<DataTemplate DataType="vm:SettingsVM">
+			<views:SettingsPage />
+		</DataTemplate>
+		<DataTemplate DataType="vm:CreatePostVM">
+			<views:CreatePostPage />
+		</DataTemplate>
+		<DataTemplate DataType="vm:OwnPostsVM"><views:OwnPostsPage /></DataTemplate>
+		<DataTemplate DataType="vm:OwnCommentsVM"><views:OwnCommentsPage /></DataTemplate>
+		<DataTemplate DataType="vm:LikedPostsVM"><views:LikedPostsPage /></DataTemplate>
+		<DataTemplate DataType="vm:DislikedPostsVM"><views:DislikedPostsPage /></DataTemplate>
+		<DataTemplate DataType="vm:FavoritePostsVM"><views:FavoritePostsPage /></DataTemplate>
+	</UserControl.DataTemplates>
+
+	<Grid>
+		<!-- MAIN CONTENT -->
+		<Grid Name="MainContent"
+			  RowDefinitions="Auto, *"
+			  IsHitTestVisible="{Binding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
+
+			<!-- ═══════════════════════════════════════════════════════════
+			HEADER — warm diagonal gradient, layered brand identity
+			═══════════════════════════════════════════════════════════ -->
+			<Border Grid.Row="0" Height="76" ClipToBounds="True">
+				<!-- Gradient background -->
+				<Border.Background>
+					<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+						<GradientStop Color="#1C3557" Offset="0"/>
+						<GradientStop Color="#2B5182" Offset="0.55"/>
+						<GradientStop Color="#3D6FAD" Offset="1"/>
+					</LinearGradientBrush>
+				</Border.Background>
+
+				<Grid ColumnDefinitions="56, *, 56" Margin="8,0">
+
+					<!-- Hamburger -->
+					<Button Width="42" Height="42" Background="Transparent"
+							Click="OpenMenu" VerticalAlignment="Center"
+							BorderThickness="0" CornerRadius="21" Classes="Hambi">
+						<Path Data="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"
+							  Fill="White" Stretch="Uniform" Width="19"/>
+					</Button>
+
+					<!-- Brand block -->
+					<StackPanel Grid.Column="1" VerticalAlignment="Center"
+								HorizontalAlignment="Center" Spacing="1">
+						<!-- Accent underline pill behind the text -->
+						<Grid>
+							<Border Height="28" CornerRadius="14"
+									HorizontalAlignment="Center" Padding="14,0">
+								<Border.Background>
+									<SolidColorBrush Color="#22FFFFFF"/>
+								</Border.Background>
+								<TextBlock Text="HAWKtuális"
+										   FontSize="19" FontWeight="Bold"
+										   Foreground="White"
+										   VerticalAlignment="Center"
+										   HorizontalAlignment="Center"
+										   LetterSpacing="0.5"/>
+							</Border>
+						</Grid>
+						<!-- Thin golden accent line -->
+						<Border Height="2" Width="60" CornerRadius="1"
+								HorizontalAlignment="Center">
+							<Border.Background>
+								<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+									<GradientStop Color="#00E8A838" Offset="0"/>
+									<GradientStop Color="#E8A838" Offset="0.5"/>
+									<GradientStop Color="#00E8A838" Offset="1"/>
+								</LinearGradientBrush>
+							</Border.Background>
+						</Border>
+					</StackPanel>
+
+					<!-- Profile button -->
+					<Button Grid.Column="2" Width="38" Height="38"
+							Padding="0" CornerRadius="19"
+							Command="{Binding ToLoginCommand}"
+							VerticalAlignment="Center" BorderThickness="0">
+						<Button.Background>
+							<SolidColorBrush Color="#33FFFFFF"/>
+						</Button.Background>
+						<Path Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+							  Fill="White" Stretch="Uniform" Width="18" Height="18"/>
+					</Button>
+				</Grid>
+			</Border>
+
+			<!-- ═══════════════════════════════════════════════════════════
+			CONTENT AREA — custom tab bar + cards
+			═══════════════════════════════════════════════════════════ -->
+			<Grid Grid.Row="1">
+				<!-- Wrap TabControl and Refresh button in a Container to overlap them -->
+				<Grid>
+					<TabControl Margin="0,0,0,0">
+						<!-- Custom tab strip with pill indicator feel -->
+						<TabControl.Styles>
+							<Style Selector="TabControl > TabStrip">
+								<Setter Property="Background" Value="White"/>
+							</Style>
+							<Style Selector="TabControl > TabStrip TabStripItem:selected">
+								<Setter Property="Background" Value="Transparent"/>
+							</Style>
+						</TabControl.Styles>
+
+						<!-- ── FEED TAB ── -->
+						<TabItem>
+							<TabItem.Header>
+								<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+									<Path Data="M11.71,19.14C10.23,19.14 9,17.92 9,16.43C9,14.94 10.21,13.71 11.71,13.71C13.2,13.71 14.43,14.94 14.43,16.43C14.43,17.92 13.2,19.14 11.71,19.14M16.5,7.7C16.37,7.74 16.29,7.87 16.33,8C17.43,11.55 15.54,14 15.54,14C15.54,14 15.65,13.88 15.7,13.75C16.85,11.08 15,7.9 15,7.9C15,7.9 15.08,9 13.92,10.6C12.75,12.21 11.71,13.71 11.71,13.71C11.71,13.71 10.74,12.57 11.2,10.87C11.66,9.17 12.85,7 12.85,7C12.85,7 11.76,8.27 11.23,10.2C10.7,12.13 11.76,13.8 11.76,13.8C11.76,13.8 10.05,12 10.27,9.15C10.5,6.3 12.85,3 12.85,3C12.85,3 10.5,3.9 8.68,6.86C6.86,9.82 7.15,13.56 7.15,13.56C7.15,13.56 6.32,12.86 6.13,11.45C5.94,10.04 6.78,8 6.78,8C6.78,8 4.75,10.45 5.06,13.45C5.37,16.45 7.82,19.14 10.82,20.57C13.82,22 17.55,20.86 19.38,18.1C21.21,15.34 20.32,11.56 20.32,11.56C20.32,11.56 19.85,12.28 19,12.63C18.15,12.98 16.89,12.8 16.89,12.8C16.89,11.2 17.58,9 17.58,9L15.5,5.5Z" 
+										  Fill="{Binding $parent[TabItem].Foreground}" 
+										  Width="14" Height="14" Stretch="Uniform"/>
+									<TextBlock Text="Feed" VerticalAlignment="Center"/>
+								</StackPanel>
+							</TabItem.Header>
+							<ScrollViewer Name="PostsScroller" ScrollChanged="PostsScrollChanged">
+								<StackPanel Margin="14,10,14,80" Spacing="0">
+									<!-- Section label (Refresh button removed from here) -->
+									<TextBlock Text="LATEST POSTS"
+											   FontSize="10" FontWeight="Bold"
+											   Foreground="#8A9BB0"
+											   LetterSpacing="1.5"
+											   Margin="4,0,0,10"/>
+
+									<ItemsControl ItemsSource="{Binding FilteredPosts}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate x:DataType="vm:PostVM">
+												<Button Classes="CardButton"
+														Command="{Binding SelectCommand}"
+														Padding="0" Background="Transparent"
+														BorderThickness="0"
+														HorizontalAlignment="Stretch"
+														Margin="0,0,0,10">
+													<Border Background="White"
+															CornerRadius="{StaticResource CardCornerRadius}"
+															BoxShadow="0 2 12 0 #12000000"
+															ClipToBounds="True">
+														<Grid RowDefinitions="4, *">
+															<!-- Coloured top accent bar -->
+															<Border Grid.Row="0" Height="4" CornerRadius="16,16,0,0">
+																<Border.Background>
+																	<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+																		<GradientStop Color="#E8A838" Offset="0"/>
+																		<GradientStop Color="#3D6FAD" Offset="1"/>
+																	</LinearGradientBrush>
+																</Border.Background>
+															</Border>
+															<!-- Card body -->
+															<StackPanel Grid.Row="1" Spacing="6" Margin="14,10,14,12">
+																<TextBlock Text="{Binding Post.Title}"
+																		   FontSize="15" FontWeight="SemiBold"
+																		   Foreground="#1C2D3F"
+																		   TextWrapping="Wrap"/>
+																<StackPanel Orientation="Horizontal" Spacing="6">
+																	<!-- Tap-to-read badge -->
+																	<Border Background="#FFF3DC" CornerRadius="8" Padding="7,2">
+																		<TextBlock Text="{Binding Post.Created_at}"
+																				   FontSize="11"
+																				   Foreground="#C07A10"/>
+																	</Border>
+																</StackPanel>
+															</StackPanel>
+														</Grid>
+													</Border>
+												</Button>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+
+									<!-- Empty state -->
+									<Border IsVisible="{Binding NoPostsFound}"
+											Background="White"
+											CornerRadius="16"
+											BoxShadow="0 2 12 0 #12000000"
+											Padding="24,20"
+											Margin="0,0,0,10">
+										<StackPanel HorizontalAlignment="Center" Spacing="6">
+											<TextBlock Text="🔍" FontSize="32" FontWeight="Normal" HorizontalAlignment="Center"/>
+											<TextBlock Text="No posts found"
+													   FontSize="15" FontWeight="SemiBold"
+													   Foreground="#1C2D3F"
+													   HorizontalAlignment="Center"/>
+											<TextBlock Text="Try a different search term or category"
+													   FontSize="12" Foreground="#8A9BB0"
+													   HorizontalAlignment="Center"/>
+										</StackPanel>
+									</Border>
+								</StackPanel>
+							</ScrollViewer>
+						</TabItem>
+
+						<!-- ── USERS TAB ── -->
+						<TabItem>
+							<TabItem.Header>
+								<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+									<Path Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" 
+										  Fill="{Binding $parent[TabItem].Foreground}" 
+										  Width="14" Height="14" Stretch="Uniform"/>
+									<TextBlock Text="Users" VerticalAlignment="Center"/>
+								</StackPanel>
+							</TabItem.Header>
+							<ScrollViewer Name="UsersScroller" ScrollChanged="UsersScrollChanged">
+								<StackPanel Margin="14,10,14,80" Spacing="0">
+
+									<TextBlock Text="MEMBERS"
+											   FontSize="10" FontWeight="Bold"
+											   Foreground="#8A9BB0"
+											   LetterSpacing="1.5"
+											   Margin="4,0,0,10"/>
+
+									<ItemsControl ItemsSource="{Binding FilteredUsers}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate x:DataType="vm:UserVM">
+												<Button Classes="CardButton"
+														Command="{Binding SelectCommand}"
+														Padding="0" 
+														Background="Transparent"
+														BorderThickness="0"
+														HorizontalAlignment="Stretch"
+														Margin="0,0,0,10">
+													<Border Background="White"
+															CornerRadius="{StaticResource CardCornerRadius}"
+															BoxShadow="0 2 12 0 #12000000"
+															Padding="12,10">
+														<Grid ColumnDefinitions="Auto, *">
+															<!-- Avatar circle with gradient -->
+															<Border Width="44" Height="44" CornerRadius="22">
+																<Border.Background>
+																	<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+																		<GradientStop Color="#3D6FAD" Offset="0"/>
+																		<GradientStop Color="#E8A838" Offset="1"/>
+																	</LinearGradientBrush>
+																</Border.Background>
+																<TextBlock Text="{Binding User.Username[0]}"
+																		   VerticalAlignment="Center"
+																		   HorizontalAlignment="Center"
+																		   FontWeight="Bold"
+																		   FontSize="16"
+																		   Foreground="White"/>
+															</Border>
+															<!-- Username + label -->
+															<StackPanel Grid.Column="1" Margin="12,0" VerticalAlignment="Center" Spacing="2">
+																<TextBlock Text="{Binding User.Username}"
+																		   FontWeight="SemiBold"
+																		   FontSize="14"
+																		   Foreground="#1C2D3F"/>
+																<TextBlock Text="View profile →"
+																		   FontSize="11"
+																		   Foreground="#8A9BB0"/>
+															</StackPanel>
+														</Grid>
+													</Border>
+												</Button>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+
+									<!-- Empty state -->
+									<Border IsVisible="{Binding NoUsersFound}"
+											Background="White"
+											CornerRadius="16"
+											BoxShadow="0 2 12 0 #12000000"
+											Padding="24,20"
+											Margin="0,0,0,10">
+										<StackPanel HorizontalAlignment="Center" Spacing="6">
+											<TextBlock Text="👤" FontSize="32" FontWeight="Normal" HorizontalAlignment="Center"/>
+											<TextBlock Text="No users found"
+													   FontSize="15" FontWeight="SemiBold"
+													   Foreground="#1C2D3F"
+													   HorizontalAlignment="Center"/>
+											<TextBlock Text="Try a different search term"
+													   FontSize="12" Foreground="#8A9BB0"
+													   HorizontalAlignment="Center"/>
+										</StackPanel>
+									</Border>
+								</StackPanel>
+							</ScrollViewer>
+						</TabItem>
+					</TabControl>
+
+					<!-- Fixed Refresh Button - Aligned with the tab strip height -->
+					<Button Classes="RefreshBtn"
+							Command="{Binding RefreshCommand}"
+							Click="Refresh_OnClick"
+							HorizontalAlignment="Right"
+							VerticalAlignment="Top"
+							Margin="0,4,10,0"
+							ZIndex="10">
+						<StackPanel Orientation="Horizontal" Spacing="4">
+							<TextBlock Text="♻" FontSize="14" FontWeight="Normal" VerticalAlignment="Center" Foreground="Green"/>
+							<TextBlock Text="Refresh" FontSize="14" FontWeight="Bold" Foreground="Green" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Button>
+				</Grid>
+
+				<!-- BRIGHTNESS OVERLAY -->
+				<Panel Background="Black"
+					   IsHitTestVisible="False"
+					   ZIndex="100"
+					   Opacity="{Binding Brightness.OverlayOpacity}"/>
+			</Grid>
+
+			<!-- FLOATING ACTION BUTTON -->
+			<Button Grid.Row="1"
+					Classes="FAB"
+					Content="+"
+					Command="{Binding ToCreatePostCommand}"
+					IsVisible="{Binding IsLoggedIn}"
+					IsHitTestVisible="{Binding !#SideMenu.IsVisible}"
+					HorizontalAlignment="Right"
+					VerticalAlignment="Bottom"
+					Margin="20"/>
+		</Grid>
+
+		<!-- OVERLAY (Dimmer) -->
+		<Panel IsVisible="{Binding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}"
+			   ZIndex="4" Background="#99000000" IsHitTestVisible="True"/>
+
+		<!-- LOGIN / PAGE CONTENT -->
+		<TransitioningContentControl Content="{Binding CurrentPage}" ZIndex="5" />
+
+		<!-- SIDE MENU OVERLAY (Drawer) -->
+		<Button x:Name="MenuOverlay"
+				IsVisible="{Binding #SideMenu.IsVisible}"
+				ZIndex="9"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Stretch"
+				Click="CloseMenu">
+			<Button.Template>
+				<ControlTemplate>
+					<Panel Background="#40000000" IsHitTestVisible="True"/>
+				</ControlTemplate>
+			</Button.Template>
+		</Button>
+
+		<Border x:Name="SideMenu" Background="White" Width="300" HorizontalAlignment="Left" IsVisible="False" ZIndex="10" BoxShadow="5 0 20 0 #40000000">
+			<Grid RowDefinitions="Auto, *">
+				<!-- Side Menu Header -->
+				<Border Grid.Row="0" Background="#212529" Height="100" Padding="20">
+					<StackPanel VerticalAlignment="Top" Spacing="7">
+						<Button Width="40" Height="40" Background="Transparent" Click="CloseMenu" VerticalAlignment="Center" BorderThickness="0" Classes="Hambi">
+							<Path Data="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" Fill="White" Stretch="Uniform" Width="20"/>
+						</Button>
+						<TextBlock Text="Advanced Search" FontSize="15" Foreground="White" HorizontalAlignment="Center"/>
+					</StackPanel>
+				</Border>
+
+				<!-- Side Menu Content -->
+				<Grid Grid.Row="1">
+					<Panel Background="Black"
+						   IsHitTestVisible="False"
+						   ZIndex="100"
+						   Opacity="{Binding Brightness.OverlayOpacity}"/>
+					<ScrollViewer>
+						<StackPanel Margin="20" Spacing="20">
+							<!-- Search Section -->
+							<StackPanel Spacing="8">
+								<TextBlock Text="Quick Search" FontWeight="SemiBold" FontSize="12" Foreground="#6C757D"/>
+								<TextBox Watermark="Search posts or users..." Text="{Binding SearchText}" CornerRadius="8"/>
+							</StackPanel>
+
+							<!-- Sort & Category Section -->
+							<StackPanel Spacing="12">
+								<TextBlock Text="Filtering" FontWeight="SemiBold" FontSize="12" Foreground="#6C757D"/>
+								<Grid ColumnDefinitions="*, 10, 2*">
+									<TextBlock Text="Sort" VerticalAlignment="Center" Foreground="#495057"/>
+									<ComboBox Grid.Column="2" HorizontalAlignment="Stretch" ItemsSource="{Binding SortBy}" SelectedItem="{Binding Sort}"/>
+								</Grid>
+								<Grid ColumnDefinitions="*, 10, 2*">
+									<TextBlock Text="Category" VerticalAlignment="Center" Foreground="#495057"/>
+									<ComboBox Grid.Column="2" HorizontalAlignment="Stretch" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}">
+										<ComboBox.ItemTemplate>
+											<DataTemplate><TextBlock Text="{Binding categoryname}"/></DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+								</Grid>
+							</StackPanel>
+
+							<Separator Background="#E9ECEF"/>
+
+							<!-- Appearance Section -->
+							<StackPanel Spacing="8">
+								<TextBlock Text="Brightness" FontWeight="SemiBold" FontSize="12" Foreground="#6C757D"/>
+								<Slider Minimum="0" Maximum="80" Value="{Binding Brightness.BrightnessValue}" Foreground="Orange"/>
+							</StackPanel>
+
+							<!-- About Us -->
+							<Button Content="ℹ About Us" Command="{Binding AboutUsCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Foreground="Black" FontSize="15"/>
+
+						</StackPanel>
+					</ScrollViewer>
+				</Grid>
+			</Grid>
+		</Border>
+
+	</Grid>
+</UserControl>

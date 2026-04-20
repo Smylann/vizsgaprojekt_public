@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Post – Reddit 2</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous" />
+
+  <link rel="stylesheet" href="reddit2.css" />
+  <!-- Apply saved theme before first paint to avoid flash -->
+  <script>
+  (function(){var d={bg:'#1e1e2e',fg:'#cdd6f4',muted:'#6c7086',card:'#181825',border:'#313244',accent:'#cba6f7',accent2:'#89b4fa',overlay:'#313244'},l={bg:'#eff1f5',fg:'#4c4f69',muted:'#9ca0b0',card:'#e6e9ef',border:'#ccd0da',accent:'#8839ef',accent2:'#1e66f5',overlay:'#dce0e8'},t=localStorage.getItem('theme')==='light'?l:d,s=document.documentElement.style;s.setProperty('--bg',t.bg);s.setProperty('--fg',t.fg);s.setProperty('--muted',t.muted);s.setProperty('--card',t.card);s.setProperty('--border',t.border);s.setProperty('--accent',t.accent);s.setProperty('--accent2',t.accent2);s.setProperty('--overlay',t.overlay);})();
+  </script>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="container-fluid px-4 py-2">
+      <a class="navbar-brand text-decoration-none me-3" href="index.html">Reddit 2</a>
+      <form class="w-100" role="search">
+        <div class="input-group">
+          <span class="input-group-text bg-transparent border-end-0"><span class="icon">🔎</span></span>
+          <input class="form-control border-start-0" type="search" placeholder="Search" aria-label="Search" />
+        </div>
+      </form>
+
+      <div class="ms-3 d-flex gap-2 align-items-center">
+        <span id="navbar-username" class="text-muted small" data-show-when="authed" style="display:none"></span>
+        <a class="btn btn-sm btn-outline-light" href="login.html" data-show-when="guest">Login</a>
+        <button class="btn btn-sm btn-outline-light" id="logout-btn" type="button" data-show-when="authed" style="display:none">
+          Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4 my-4">
+    <div class="row g-4">
+
+      <!-- Left sidebar -->
+      <aside class="col-12 col-lg-3 order-2 order-lg-1">
+        <nav>
+          <p class="sidebar-heading">📂 Categories</p>
+          <ul class="list-group mb-3" id="cat-list">
+            <li class="list-group-item"><a href="index.html" class="sidebar-link">All</a></li>
+          </ul>
+
+          <p class="sidebar-heading mt-3">🔗 Links</p>
+          <ul class="list-group">
+            <li class="list-group-item"><a href="index.html" class="sidebar-link">🏠 Back to Feed</a></li>
+            <li class="list-group-item"><a href="about.html" class="sidebar-link">ℹ About Us</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main content -->
+      <main class="col-12 col-lg-6 order-1 order-lg-2">
+
+        <!-- Post -->
+        <div id="post-container" class="card mb-4">
+          <div class="card-body text-center py-5 text-muted">Loading post…</div>
+        </div>
+
+        <!-- Comments -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title mb-3">Comments</h5>
+            <div id="comment-list">
+              <p class="text-muted">Loading comments…</p>
+            </div>
+
+            <!-- Add comment (logged-in) -->
+            <div id="add-comment-section" style="display:none">
+              <hr />
+              <div class="mb-2">
+                <textarea
+                  class="form-control"
+                  id="comment-text"
+                  rows="3"
+                  placeholder="Write a comment…"></textarea>
+              </div>
+              <button class="btn btn-primary btn-sm" id="submit-comment">Post comment</button>
+              <span id="comment-error" class="text-danger ms-2" style="display:none"></span>
+            </div>
+
+            <!-- Add comment (guest) -->
+            <p id="login-to-comment" class="text-muted mt-3 mb-0" style="display:none">
+              <a href="login.html">Log in</a> to post a comment.
+            </p>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- Right sidebar -->
+      <aside class="col-12 col-lg-3 order-3">
+        <div class="mb-3">
+          <p class="sidebar-heading">🐱 Cica sarok</p>
+          <div class="cica-box mb-3" style="height:520px;">
+            <img src="assets/thumbnail.png" alt="Cica" referrerpolicy="no-referrer" class="img-fluid h-100 w-100 object-fit-cover">
+          </div>
+          <div class="cica-box d-flex flex-column align-items-center justify-content-center" style="height:120px;">
+            <p class="text-muted text-center mb-1" style="font-size:.85rem">🍎 Cica almával</p>
+            <p class="text-muted text-center mb-1" style="font-size:.85rem">Nagyon kis cuki 🥺</p>
+            <p class="text-muted text-center mb-0" style="font-size:.78rem">sok szazalekot erdemel</p>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <script src="themeSlider.js"></script>
+
+  <script type="module">
+    import { getPost, getComments, addComment, vote, getCategories, favouritePost } from './api.js';
+    import { initAuth, isLoggedIn } from './auth.js';
+    import {
+      applyLocalVoteToggle,
+      applyVoteStateBySelector,
+      getUserIdFromUser,
+      syncVoteStateForUser
+    } from './voteState.js';
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // ── Setup ─────────────────────────────────────────────────────────────────
+    const params  = new URLSearchParams(window.location.search);
+    const postId  = parseInt(params.get('id'), 10);
+    let currentVoteUserId = null;
+
+    initAuth().then(async (user) => {
+      if (isLoggedIn()) {
+        currentVoteUserId = getUserIdFromUser(user);
+        await syncVoteStateForUser(currentVoteUserId);
+        applyVoteStateBySelector(postId, { up: '#btn-upvote', down: '#btn-downvote' });
+        document.getElementById('add-comment-section').style.display = '';
+      } else {
+        document.getElementById('login-to-comment').style.display = '';
+      }
+    });
+
+    // Populate category sidebar (links go back to feed filtered by category)
+    (async () => {
+      try {
+        const cats = await getCategories();
+        const catList = document.getElementById('cat-list');
+        cats.forEach(c => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item';
+          li.innerHTML = `<a href="index.html?cat=${encodeURIComponent(c.categoryname)}" class="sidebar-link">${escapeHtml(c.categoryname)}</a>`;
+          catList.appendChild(li);
+        });
+      } catch { /* categories are optional */ }
+    })();
+
+    if (!postId || isNaN(postId)) {
+      document.getElementById('post-container').innerHTML =
+        '<div class="card-body text-danger">Invalid or missing post ID.</div>';
+    } else {
+      loadPost();
+      loadComments();
+    }
+
+    // ── Post ──────────────────────────────────────────────────────────────────
+    async function loadPost() {
+      const container = document.getElementById('post-container');
+      try {
+        const post = await getPost(postId);
+        document.title = `${escapeHtml(post.title)} – Reddit 2`;
+
+        container.innerHTML = `
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <span class="badge badge-cat">${escapeHtml(post.category?.categoryname ?? '')}</span>
+            </div>
+            <h4 class="card-title mt-2">${escapeHtml(post.title)}</h4>
+            <small class="text-muted">
+              by <strong style="color:var(--accent)">${escapeHtml(post.user?.username ?? 'unknown')}</strong>
+              &nbsp;·&nbsp;
+              ${new Date(post.created_at).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' })}
+            </small>
+            <hr style="border-color:var(--border)" />
+            <p class="card-text" style="white-space:pre-wrap">${escapeHtml(post.content)}</p>
+            <div class="d-flex align-items-center gap-3 mt-3 flex-wrap">
+              <button class="btn btn-sm btn-upvote" id="btn-upvote">▲ Upvote</button>
+              <strong id="vote-count" class="vote-count fs-5">${post.votes ?? 0}</strong>
+              <button class="btn btn-sm btn-downvote" id="btn-downvote">▼ Downvote</button>
+              <button class="btn btn-sm" id="btn-fav" data-fav="false"
+                style="border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--muted);margin-left:auto">
+                ♡ Save
+              </button>
+            </div>
+          </div>`;
+
+        document.getElementById('btn-upvote').addEventListener('click', () => handleVote(true));
+        document.getElementById('btn-downvote').addEventListener('click', () => handleVote(false));
+        applyVoteStateBySelector(postId, { up: '#btn-upvote', down: '#btn-downvote' });
+        document.getElementById('btn-fav').addEventListener('click', async (e) => {
+          const btn = e.currentTarget;
+          try {
+            await favouritePost(postId);
+            const saved = btn.dataset.fav !== 'true';
+            btn.dataset.fav = saved ? 'true' : 'false';
+            btn.textContent = saved ? '❤ Saved' : '♡ Save';
+            btn.style.color = saved ? 'var(--accent)' : 'var(--muted)';
+            btn.style.borderColor = saved ? 'var(--accent)' : 'var(--border)';
+          } catch (err) {
+            if (err?.status === 401) alert('You must be logged in to save posts.');
+            else alert('Could not update favourites.');
+          }
+        });
+      } catch (err) {
+        container.innerHTML = `<div class="card-body text-danger">Could not load post (${err.status ?? 'error'}).</div>`;
+      }
+    }
+
+    async function handleVote(isUpvote) {
+      try {
+        await vote(postId, isUpvote);
+        const updated = await getPost(postId);
+        document.getElementById('vote-count').textContent = updated.votes ?? 0;
+
+        if (currentVoteUserId != null) {
+          await syncVoteStateForUser(currentVoteUserId);
+        } else {
+          applyLocalVoteToggle(postId, isUpvote);
+        }
+        applyVoteStateBySelector(postId, { up: '#btn-upvote', down: '#btn-downvote' });
+      } catch (err) {
+        if (err?.status === 401) alert('You must be logged in to vote.');
+        else alert('Could not register vote. Please try again.');
+      }
+    }
+
+    // ── Comments ──────────────────────────────────────────────────────────────
+    async function loadComments() {
+      const list = document.getElementById('comment-list');
+      try {
+        const comments = await getComments(postId);
+        if (!comments || comments.length === 0) {
+          list.innerHTML = '<p class="text-muted mb-0">No comments yet. Be the first!</p>';
+          return;
+        }
+        list.innerHTML = comments.map(c => `
+          <div class="comment-item">
+            <div>
+              <span class="comment-author">${escapeHtml(c.user?.username ?? 'unknown')}</span>
+              <span class="comment-date">${new Date(c.created_at).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' })}</span>
+            </div>
+            <p class="comment-text">${escapeHtml(c.commentcontent)}</p>
+          </div>`).join('');
+      } catch {
+        list.innerHTML = '<p class="text-danger mb-0">Could not load comments.</p>';
+      }
+    }
+
+    document.getElementById('submit-comment')?.addEventListener('click', async () => {
+      const textarea = document.getElementById('comment-text');
+      const errorEl  = document.getElementById('comment-error');
+      const text = textarea.value.trim();
+
+      if (!text) {
+        errorEl.textContent = 'Comment cannot be empty.';
+        errorEl.style.display = '';
+        return;
+      }
+      errorEl.style.display = 'none';
+
+      const btn = document.getElementById('submit-comment');
+      btn.disabled = true;
+      try {
+        await addComment(postId, text);
+        textarea.value = '';
+        await loadComments();
+      } catch (err) {
+        errorEl.textContent = err?.status === 401 ? 'You must be logged in.' : 'Could not post comment.';
+        errorEl.style.display = '';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

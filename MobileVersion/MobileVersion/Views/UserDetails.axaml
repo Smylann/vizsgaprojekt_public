@@ -1,0 +1,137 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MobileVersion.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="700"
+             x:Class="MobileVersion.UserDetails"
+             x:DataType="vm:UserVM"
+             Background="#121212">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> 
+            <RowDefinition Height="*"/>    
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            
+            <!-- CENTRAL USER PROFILE -->
+            <Panel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Ellipse Width="250" Height="250" Fill="#1A3498DB" Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse.Effect><BlurEffect Radius="60" /></Ellipse.Effect>
+                </Ellipse>
+
+                <StackPanel ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
+                    <TextBlock Text="{Binding User.Username}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center">
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                                <GradientStop Offset="0.0" Color="#3498DB" />
+                                <GradientStop Offset="1.0" Color="#9B59B6" />
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+            
+                    <Panel Width="120" Height="120">
+                        <Button Command="{Binding ToSettingsCommand}" FontSize="80"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"
+                                Background="Transparent" BorderThickness="0" Classes="RadialButton"
+                                ClipToBounds="False">
+                            <TextBlock Text="👤" Classes="EmojiIcon" FontSize="80" ClipToBounds="False"/>
+                        </Button>
+                    </Panel>
+                </StackPanel>
+            </Panel>
+
+            <!-- Posts -->
+            <Panel HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransform="translate(-90px, -140px)">
+                <Button Classes="RadialButton" Command="{Binding ShowOwnPostsCommand}" ClipToBounds="False">
+                    <StackPanel ClipToBounds="False">
+                        <TextBlock Text="📋" Classes="EmojiIcon" ClipToBounds="False"/>
+                        <TextBlock Text="Posts" Classes="LabelText"/>
+                    </StackPanel>
+                </Button>
+            </Panel>
+
+            <!-- Comments -->
+            <Panel HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransform="translate(90px, -140px)">
+                <Button Classes="RadialButton" Command="{Binding ShowOwnCommentsCommand}" ClipToBounds="False">
+                    <StackPanel ClipToBounds="False">
+                        <TextBlock Text="💬" Classes="EmojiIcon" ClipToBounds="False"/>
+                        <TextBlock Text="Comments" Classes="LabelText"/>
+                    </StackPanel>
+                </Button>
+            </Panel>
+
+            <!-- Back -->
+            <Panel HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransform="translate(-160px, 0px)">
+                <Button Classes="RadialButton" Command="{Binding CloseCommand}" ClipToBounds="False">
+                    <StackPanel ClipToBounds="False">
+                        <TextBlock Text="⬅" Classes="EmojiIcon" Foreground="#E74C3C" ClipToBounds="False"/>
+                        <TextBlock Text="Back" Classes="LabelText"/>
+                    </StackPanel>
+                </Button>
+            </Panel>
+
+            <!-- Favorites -->
+            <Panel HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransform="translate(160px, 0px)">
+                <Button Classes="RadialButton" Command="{Binding ShowFavoritePostsCommand}" ClipToBounds="False">
+                    <StackPanel ClipToBounds="False">
+                        <TextBlock Text="⭐" Classes="EmojiIcon" Foreground="#F1C40F" ClipToBounds="False"/>
+                        <TextBlock Text="Favorites" Classes="LabelText"/>
+                    </StackPanel>
+                </Button>
+            </Panel>
+
+            <!-- Liked -->
+            <Panel HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransform="translate(-90px, 140px)">
+                <Button Classes="RadialButton" Command="{Binding ShowLikedPostsCommand}" ClipToBounds="False">
+                    <StackPanel ClipToBounds="False">
+                        <TextBlock Text="👍" Classes="EmojiIcon" Foreground="#2ECC71" ClipToBounds="False"/>
+                        <TextBlock Text="Liked" Classes="LabelText"/>
+                    </StackPanel>
+                </Button>
+            </Panel>
+
+            <!-- Disliked -->
+            <Panel HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransform="translate(90px, 140px)">
+                <Button Classes="RadialButton" Command="{Binding ShowDislikedPostsCommand}" ClipToBounds="False">
+                    <StackPanel ClipToBounds="False">
+                        <TextBlock Text="👎" Classes="EmojiIcon" Foreground="#95A5A6" ClipToBounds="False"/>
+                        <TextBlock Text="Disliked" Classes="LabelText"/>
+                    </StackPanel>
+                </Button>
+            </Panel>
+        </Grid>
+    </Grid>
+
+    <UserControl.Styles>
+        <Style Selector="Button.RadialButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="ClipToBounds" Value="False"/>
+            <Setter Property="RenderTransform" Value="scale(1.0)"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="CubicEaseOut"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="TextBlock.EmojiIcon">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Segoe UI Emoji, Apple Color Emoji, Noto Color Emoji, sans-serif"/>
+            <Setter Property="ClipToBounds" Value="False"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
+
+        <Style Selector="TextBlock.LabelText">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
+            <Setter Property="Foreground" Value="#888888"/>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

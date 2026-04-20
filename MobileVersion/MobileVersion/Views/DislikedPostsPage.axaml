@@ -1,0 +1,123 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MobileVersion.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="700"
+             x:Class="MobileVersion.DislikedPostsPage"
+             x:DataType="vm:DislikedPostsVM">
+
+    <!-- UNIQUE MIDNIGHT CRIMSON GRADIENT BACKGROUND -->
+    <UserControl.Background>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Offset="0.0" Color="#1A0505" />
+            <GradientStop Offset="1.0" Color="#2D0B0B" />
+        </LinearGradientBrush>
+    </UserControl.Background>
+
+    <UserControl.Styles>
+        <!-- Specialized "Dislike" Card Style -->
+        <Style Selector="Border.DislikeCard">
+            <Setter Property="Background" Value="#1AFFFFFF"/>
+            <Setter Property="BorderBrush" Value="#30E74C3C"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BoxShadow" Value="0 4 15 0 #80000000"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" Easing="SineEaseOut"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        
+
+        <Style Selector="Button.CardWrapper TextBlock">
+            <Setter Property="Foreground" Value="#FADBD8" />
+        </Style>
+
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- AGGRESSIVE MODERN HEADER -->
+        <Border Grid.Row="0" Padding="20" Background="#15000000">
+            <Grid ColumnDefinitions="Auto, *">
+                <Button Command="{Binding CloseCommand}" 
+                        Background="#C0392B" 
+                        CornerRadius="8"
+                        Width="40" Height="40"
+                        Padding="0">
+                    <Path Data="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" 
+                          Fill="White" 
+                          Width="18" Height="18"
+                          Stretch="Uniform" 
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"/>
+                </Button>
+                
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="20,0">
+                    <TextBlock Text="CRITICAL FEEDBACK" 
+                               FontSize="9" 
+                               FontWeight="Heavy" 
+                               Foreground="#80E74C3C" 
+                               LetterSpacing="3"/>
+                    <TextBlock Text="{Binding Username}" 
+                               FontSize="22" 
+                               FontWeight="Bold" 
+                               Foreground="White"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- DISLIKED POSTS LIST -->
+        <ScrollViewer Grid.Row="1" Name="PostsScroller" ScrollChanged="ScrollChanged">
+            <ItemsControl ItemsSource="{Binding DislikedPosts}" Margin="20">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PostVM">
+                        <Button Classes="CardWrapper"
+                                Background="Transparent" 
+                                Padding="0" 
+                                BorderThickness="0"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding SelectCommand}">
+                            <Border Classes="DislikeCard" 
+                                    Margin="0,0,0,15" 
+                                    Padding="18" 
+                                    CornerRadius="6"> <!-- Sharper corners for a serious look -->
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0" Spacing="4">
+                                        <TextBlock Text="{Binding Post.Title}" 
+                                                   FontWeight="Bold" 
+                                                   FontSize="16"
+                                                   Foreground="White"/>
+                                        <TextBlock Text="{Binding Post.Content}" 
+                                                   TextWrapping="Wrap" 
+                                                   MaxLines="2"
+                                                   Opacity="0.6"
+                                                   FontSize="12"/>
+                                        
+                                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                            <Border Background="#E74C3C" CornerRadius="4" Padding="8,2">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="👎" FontWeight="Normal" FontSize="10" Foreground="White" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Votes}" FontSize="10" Foreground="White" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    
+                                    <!-- Warning/Critical Icon -->
+                                    <TextBlock Grid.Column="1" 
+                                               Text="▼" 
+                                               FontSize="24" 
+                                               FontWeight="Normal"
+                                               Foreground="#E74C3C" 
+                                               VerticalAlignment="Top"/>
+                                </Grid>
+                            </Border>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

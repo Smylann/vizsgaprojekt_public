@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reddit 2</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous" />
+
+  <link rel="stylesheet" href="reddit2.css" />
+  <!-- Apply saved theme before first paint to avoid flash -->
+  <script>
+  (function(){var d={bg:'#1e1e2e',fg:'#cdd6f4',muted:'#6c7086',card:'#181825',border:'#313244',accent:'#cba6f7',accent2:'#89b4fa',overlay:'#313244'},l={bg:'#eff1f5',fg:'#4c4f69',muted:'#9ca0b0',card:'#e6e9ef',border:'#ccd0da',accent:'#8839ef',accent2:'#1e66f5',overlay:'#dce0e8'},t=localStorage.getItem('theme')==='light'?l:d,s=document.documentElement.style;s.setProperty('--bg',t.bg);s.setProperty('--fg',t.fg);s.setProperty('--muted',t.muted);s.setProperty('--card',t.card);s.setProperty('--border',t.border);s.setProperty('--accent',t.accent);s.setProperty('--accent2',t.accent2);s.setProperty('--overlay',t.overlay);})();
+  </script>
+</head>
+
+<body>
+
+  <!-- Create Post Modal -->
+  <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createPostModalLabel">New Post</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="post-category" class="form-label">Category</label>
+            <select class="form-select" id="post-category">
+              <option value="" disabled selected>Select a category…</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="post-title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="post-title" placeholder="Post title" maxlength="200" />
+          </div>
+          <div class="mb-3">
+            <label for="post-body" class="form-label">Body</label>
+            <textarea class="form-control" id="post-body" rows="6" placeholder="What's on your mind?"></textarea>
+          </div>
+          <div id="post-error" class="text-danger" style="display:none"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="submit-post">Post</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offcanvas sidebar (mobile only) -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel"
+       style="background:var(--card);color:var(--fg);border-color:var(--border)">
+    <div class="offcanvas-header" style="border-bottom:1px solid var(--border)">
+      <h5 class="offcanvas-title" id="mobileSidebarLabel">Menu</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <!-- Auth -->
+      <div class="d-flex flex-column gap-2 mb-3">
+        <div id="mobile-username" class="fw-semibold" data-show-when="authed" style="display:none"></div>
+        <a class="btn btn-primary btn-sm" href="login.html" data-show-when="guest">Login</a>
+        <button class="btn btn-outline-secondary btn-sm" id="mobile-logout-btn" type="button" data-show-when="authed" style="display:none">Logout</button>
+      </div>
+
+      <p class="sidebar-heading">📂 Categories</p>
+      <ul class="list-group mb-3" id="mobile-cat-list">
+        <li class="list-group-item">
+          <a href="#" class="sidebar-link active" data-cat="">All</a>
+        </li>
+      </ul>
+
+      <p class="sidebar-heading mt-3">🔗 Links</p>
+      <ul class="list-group">
+        <li class="list-group-item"><a href="favourites.html" class="sidebar-link">❤ Favorite Posts</a></li>
+        <li class="list-group-item"><a href="about.html" class="sidebar-link">ℹ About Us</a></li>
+        <li class="list-group-item"><a href="settings.html" class="sidebar-link">⚙ Settings</a></li>
+        <li class="list-group-item"><a href="https://revolut.me/faragf2oh" class="sidebar-link">💸 Support Us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <nav class="navbar">
+    <div class="container-fluid px-4 py-2">
+      <a class="navbar-brand text-decoration-none me-3" href="index.html">Reddit 2</a>
+      <!-- Burger: only visible on small screens -->
+      <button class="btn btn-outline-secondary btn-sm me-2 d-lg-none" type="button"
+              data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar"
+              aria-label="Open menu">☰</button>
+
+      <form class="w-100" role="search" id="search-form">
+        <div class="input-group">
+          <span class="input-group-text bg-transparent border-end-0"><span class="icon">🔎</span></span>
+          <input class="form-control border-start-0" type="search" id="search-input" placeholder="Search" aria-label="Search" />
+        </div>
+      </form>
+
+      <div class="ms-3 d-flex gap-2 align-items-center">
+        <span id="navbar-username-top" class="text-muted small" data-show-when="authed" style="display:none"></span>
+        <a class="btn btn-sm btn-outline-light" href="login.html" data-show-when="guest">Login</a>
+        <button class="btn btn-sm btn-outline-light" id="navbar-logout-btn" type="button" data-show-when="authed" style="display:none">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4 my-4">
+    <div class="row g-4">
+      <aside class="col-12 col-lg-2 order-2 order-lg-1">
+        <nav class="sidebar-sticky">
+
+          <p class="sidebar-heading">📂 Categories</p>
+          <ul class="list-group mb-3" id="cat-list">
+            <li class="list-group-item"><a href="#" class="sidebar-link active" data-cat="">All</a></li>
+          </ul>
+
+          <p class="sidebar-heading mt-3">🔗 Links</p>
+          <ul class="list-group">
+            <li class="list-group-item"><a href="favourites.html" class="sidebar-link">❤ Favorite Posts</a></li>
+            <li class="list-group-item"><a href="about.html" class="sidebar-link">ℹ About Us</a></li>
+            <li class="list-group-item"><a href="settings.html" class="sidebar-link">⚙ Settings</a></li>
+            <li class="list-group-item"><a href="https://revolut.me/faragf2oh" class="sidebar-link">💸 Support Us</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main feed -->
+      <main class="col-12 col-lg-8 order-1 order-lg-2">
+        <!-- New Post button (logged-in only) -->
+        <div id="new-post-btn-wrap" data-show-when="authed" style="display:none" class="mb-3">
+          <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#createPostModal">
+            &#43; New Post
+          </button>
+        </div>
+
+        <!-- This is where feed.js will render posts -->
+        <div id="post-feed">
+          <div class="card mb-3 welcome-card">
+            <div class="card-body text-center py-4">
+              <h5 class="card-title mb-1">Welcome to Reddit 2 🎉</h5>
+              <p class="text-muted mb-0">Browse the latest posts below, or <a href="login.html">log in</a> to vote and comment.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <aside class="col-12 col-lg-2 order-3">
+        <div class="card mb-3">
+          <div class="card-body">
+            <button id="theme-toggle" class="btn btn-outline-secondary btn-sm w-100">🌙 Dark mode</button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <p class="sidebar-heading">🐱 Cica sarok</p>
+          <div class="cica-box mb-3" style="height:520px;">
+            <img src="https://bokitanator.org/img.jpg" alt="Cica" referrerpolicy="no-referrer" class="img-fluid h-100 w-100 object-fit-cover">
+          </div>
+          <div class="cica-box d-flex flex-column align-items-center justify-content-center" style="height:120px;">
+            <p class="text-muted text-center mb-1" style="font-size:.85rem">🍎 Cica almával</p>
+            <p class="text-muted text-center mb-1" style="font-size:.85rem">Nagyon kis cuki 🥺</p>
+            <p class="text-muted text-center mb-0" style="font-size:.78rem">sok szazalekot erdemel</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+  <!-- Non-module script (your existing theme slider) -->
+  <script src="themeSlider.js"></script>
+
+  <!-- Module scripts (these require your new JS files to exist in the same folder) -->
+  <script type="module">
+    // If you haven't created these files yet, comment out the imports you don't have.
+    import { initAuth, getUser } from './auth.js';
+    import './feed.js';
+    import { filterByCategory, filterBySearch, loadUserVotes } from './feed.js';
+    import { getCategories, createPost } from './api.js';
+    import { getUserIdFromUser } from './voteState.js';
+
+    // Initialize login state (shows/hides login/logout, sets username)
+    initAuth().then(() => {
+      const user = getUser();
+      if (user) {
+        const uid = getUserIdFromUser(user);
+        if (Number.isFinite(uid)) loadUserVotes(uid);
+      }
+    });
+
+    // ── Search ─────────────────────────────────────────────────────────────
+    const searchInput = document.getElementById('search-input');
+    const searchForm  = document.getElementById('search-form');
+    let searchDebounce;
+    searchForm.addEventListener('submit', e => e.preventDefault());
+    searchInput.addEventListener('input', () => {
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(() => {
+        const q = searchInput.value.trim();
+        if (q) {
+          filterBySearch(q);
+        } else {
+          filterByCategory(null); // back to normal feed
+        }
+      }, 350);
+    });
+    searchInput.addEventListener('search', () => {
+      // fires when the native clear (×) button is clicked
+      if (!searchInput.value) filterByCategory(null);
+    });
+
+    // Navbar top logout button
+    document.getElementById('navbar-logout-btn')?.addEventListener('click', async () => {
+      const { logout } = await import('./api.js');
+      await logout();
+      window.location.href = '/login.html';
+    });
+
+    // Mirror auth state into the mobile offcanvas as well
+    document.getElementById('mobile-logout-btn')?.addEventListener('click', async () => {
+      const { logout } = await import('./api.js');
+      await logout();
+      window.location.href = '/login.html';
+    });
+
+    // Load categories from API and populate both sidebars + post modal
+    async function loadCategories() {
+      const catList       = document.getElementById('cat-list');
+      const mobileCatList = document.getElementById('mobile-cat-list');
+      const postSelect    = document.getElementById('post-category');
+      try {
+        const cats = await getCategories();
+        if (!cats || cats.length === 0) return;
+        cats.forEach(c => {
+          const makeItem = () => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.innerHTML = `<a href="#" class="sidebar-link" data-cat="${c.categoryname}">${c.categoryname}</a>`;
+            return li;
+          };
+          catList.appendChild(makeItem());
+          mobileCatList.appendChild(makeItem());
+          // also populate the create-post dropdown
+          const opt = document.createElement('option');
+          opt.value = c.categoryname;
+          opt.textContent = c.categoryname;
+          postSelect.appendChild(opt);
+        });
+      } catch (e) {
+        console.warn('Could not load categories', e);
+      }
+    }
+
+    // Wire up category click -> filter feed (desktop sidebar)
+    document.getElementById('cat-list').addEventListener('click', e => {
+      const link = e.target.closest('[data-cat]');
+      if (!link) return;
+      e.preventDefault();
+      filterByCategory(link.dataset.cat || null);
+    });
+
+    // Wire up category click -> filter feed (mobile offcanvas)
+    document.getElementById('mobile-cat-list').addEventListener('click', e => {
+      const link = e.target.closest('[data-cat]');
+      if (!link) return;
+      e.preventDefault();
+      // Close the offcanvas, then filter
+      const oc = bootstrap.Offcanvas.getInstance(document.getElementById('mobileSidebar'));
+      oc?.hide();
+      filterByCategory(link.dataset.cat || null);
+    });
+
+    // Load categories once, then apply ?cat= URL param if present
+    const initCat = new URLSearchParams(window.location.search).get('cat');
+    loadCategories().then(() => {
+      if (initCat) filterByCategory(initCat);
+    });
+
+    // ── Create Post modal ──────────────────────────────────────────────────
+    const createPostModal = document.getElementById('createPostModal');
+
+    // Reset form when modal opens
+    createPostModal.addEventListener('show.bs.modal', () => {
+      document.getElementById('post-title').value = '';
+      document.getElementById('post-body').value = '';
+      document.getElementById('post-category').selectedIndex = 0;
+      const err = document.getElementById('post-error');
+      err.style.display = 'none';
+      err.textContent = '';
+    });
+
+    document.getElementById('submit-post').addEventListener('click', async () => {
+      const categoryname = document.getElementById('post-category').value.trim();
+      const title        = document.getElementById('post-title').value.trim();
+      const content      = document.getElementById('post-body').value.trim();
+      const errorEl      = document.getElementById('post-error');
+
+      if (!categoryname) { errorEl.textContent = 'Please select a category.'; errorEl.style.display = ''; return; }
+      if (!title)        { errorEl.textContent = 'Title cannot be empty.';    errorEl.style.display = ''; return; }
+      if (!content)      { errorEl.textContent = 'Body cannot be empty.';     errorEl.style.display = ''; return; }
+      errorEl.style.display = 'none';
+
+      const btn = document.getElementById('submit-post');
+      btn.disabled = true;
+      try {
+        await createPost({ categoryname, title, content });
+        bootstrap.Modal.getInstance(createPostModal).hide();
+        // Reload the feed from the top
+        filterByCategory(null);
+      } catch (err) {
+        errorEl.textContent = err?.status === 401
+          ? 'You must be logged in to post.'
+          : (err?.body?.message ?? err?.body?.title ?? 'Could not create post.');
+        errorEl.style.display = '';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

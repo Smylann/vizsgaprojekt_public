@@ -1,0 +1,53 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:MobileVersion.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="MobileVersion.SettingsPage"
+			 x:DataType="vm:SettingsVM"
+			 Width="350"
+			 MaxHeight="600">
+	<Border CornerRadius="25"
+			Background="#1E1E1E"
+			BoxShadow="0 10 20 0 #66000000"
+			BorderBrush="#44FFFFFF"
+			BorderThickness="1"
+			Padding="20">
+		<Grid RowDefinitions="*,Auto">
+
+			<!-- SCROLLABLE CONTENT -->
+			<ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+				<StackPanel Spacing="4">
+					<Button Command="{Binding CloseCommand}" Background="Transparent" BorderThickness="0" Foreground="GhostWhite" FontSize="18">
+						<Path Data="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" 
+                          Fill="White" 
+                          Width="18" Height="18" 
+                          Stretch="Uniform"/>
+					</Button>
+					<TextBlock Text="Modify Password:" Margin="10,8,10,2" HorizontalAlignment="Left" Foreground="FloralWhite" FontWeight="Bold" FontSize="15"/>
+					<TextBox Text="{Binding CurrentPass}" Watermark="New Password" Margin="10,2" MinWidth="150" HorizontalAlignment="Left"/>
+					<TextBox Text="{Binding NewPass}" Watermark="New Password" Margin="10,2" MinWidth="150" HorizontalAlignment="Left"/>
+					<TextBox Text="{Binding NewPassConfirm}" Watermark="Confirm Password" Margin="10,2" MinWidth="150" HorizontalAlignment="Left"/>
+					<Button Content="Save" Command="{Binding ModifyPassCommand}" Margin="10,3" HorizontalAlignment="Left" Foreground="MediumPurple" FontSize="17"/>
+					<Label Content="{Binding ErrorMessage}" Foreground="{Binding EColor}"/>
+				</StackPanel>
+			</ScrollViewer>
+
+			<!-- PINNED BOTTOM LOGOUT -->
+			<Border Grid.Row="1" BorderBrush="#44FFFFFF" BorderThickness="0,1,0,0" Margin="0,10,0,0">
+				<Button Content="Logout"
+						Command="{Binding LogOutCommand}"
+						HorizontalAlignment="Stretch"
+						HorizontalContentAlignment="Center"
+						Background="Transparent"
+						BorderThickness="0"
+						Foreground="#FF6B6B"
+						FontSize="18"
+						FontWeight="Bold"
+						Margin="0,10,0,0"/>
+			</Border>
+
+		</Grid>
+	</Border>
+</UserControl>

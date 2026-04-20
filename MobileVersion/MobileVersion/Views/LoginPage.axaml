@@ -1,0 +1,65 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:MobileVersion.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="MobileVersion.LoginPage"
+			 x:DataType="vm:LoginVM"
+			 Width="350"
+			 MaxHeight="600">
+	<Border CornerRadius="25"
+			Background="#1E1E1E"
+			BoxShadow="0 10 20 0 #66000000"
+			BorderBrush="#44FFFFFF"
+			BorderThickness="1"
+			Padding="20">
+		<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="0">
+
+				<!-- LOGIN SECTION -->
+				<StackPanel Spacing="2">
+					<Button Command="{Binding CloseCommand}" Background="Transparent" BorderThickness="0" Foreground="GhostWhite" FontSize="18">
+						<Path Data="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" 
+                          Fill="White" 
+                          Width="18" Height="18" 
+                          Stretch="Uniform"/>
+					</Button>
+					<TextBlock Text="Login" Margin="10,10,10,2" HorizontalAlignment="Center" Foreground="SkyBlue" FontWeight="Heavy" FontSize="40"/>
+					<TextBlock Text="Username" Margin="10,8,10,2" HorizontalAlignment="Center" Foreground="FloralWhite" FontWeight="Heavy" FontSize="15"/>
+					<TextBox Text="{Binding LoginUsername}" Margin="10,2" MinWidth="150" HorizontalAlignment="Center"/>
+					<TextBlock Text="Password" Margin="10,8,10,2" HorizontalAlignment="Center" Foreground="FloralWhite" FontWeight="Heavy" FontSize="15"/>
+					<TextBox Text="{Binding LoginPassword}" Margin="10,2" PasswordChar="*" RevealPassword="{Binding SeeLogPass}" MinWidth="150" HorizontalAlignment="Center">
+						<TextBox.InnerRightContent>
+							<Button Content="👁" Command="{Binding ToggleLogPassCommand}" BorderThickness="0" Background="Transparent"/>
+						</TextBox.InnerRightContent>
+					</TextBox>
+					<Label Content="{Binding ErrorMessage}" Margin="10,2" MinWidth="150" HorizontalAlignment="Center" Foreground="Red" IsVisible="{Binding ErrorMessageIsVisible}"/>
+					<Button Content="Sign in!" Command="{Binding LoginCommand}" Margin="10,8,10,2" HorizontalAlignment="Center" Background="Transparent" BorderThickness="0" Foreground="SkyBlue" FontSize="18"/>
+					<Button Content="No account yet?" Margin="10,2" HorizontalAlignment="Center" Background="Transparent" BorderThickness="0" Foreground="GhostWhite" FontSize="10" Command="{Binding ShowRegisterCommand}"/>
+				</StackPanel>
+
+				<!-- DIVIDER -->
+				<Border Height="1" Background="#44FFFFFF" Margin="10,16" IsVisible="{Binding IsRegisterVisible}"/>
+
+				<!-- REGISTER SECTION -->
+				<StackPanel Spacing="2" IsVisible="{Binding IsRegisterVisible}">
+					<TextBlock Text="Register" Margin="10,2,10,2" HorizontalAlignment="Center" Foreground="Orange" FontWeight="Heavy" FontSize="30"/>
+					<TextBlock Text="Username" Margin="10,8,10,2" HorizontalAlignment="Center" Foreground="FloralWhite" FontWeight="Bold" FontSize="15"/>
+					<TextBox Text="{Binding RegUsername}" Margin="10,2" MinWidth="150" HorizontalAlignment="Center"/>
+					<TextBlock Text="Email" Margin="10,8,10,2" HorizontalAlignment="Center" Foreground="FloralWhite" FontWeight="Bold" FontSize="15"/>
+					<TextBox Text="{Binding RegEmail}" Margin="10,2" MinWidth="150" HorizontalAlignment="Center"/>
+					<TextBlock Text="Password" Margin="10,8,10,2" HorizontalAlignment="Center" Foreground="FloralWhite" FontWeight="Bold" FontSize="15"/>
+					<TextBox Text="{Binding RegPassword}" Margin="10,2" PasswordChar="*" RevealPassword="{Binding SeeRegPass}" MinWidth="150" HorizontalAlignment="Center">
+						<TextBox.InnerRightContent>
+							<Button Content="👁" Command="{Binding ToggleRegPassCommand}" BorderThickness="0" Background="Transparent"/>
+						</TextBox.InnerRightContent>
+					</TextBox>
+					<Label Content="{Binding ErrorMessage}" Margin="10,2" MinWidth="150" HorizontalAlignment="Center" Foreground="Red" IsVisible="{Binding ErrorMessageIsVisible}"/>
+					<Button Content="Make an account!" Command="{Binding RegisterCommand}" Margin="10,8,10,10" HorizontalAlignment="Center" Background="Transparent" BorderThickness="0" Foreground="Orange" FontSize="18"/>
+				</StackPanel>
+
+			</StackPanel>
+		</ScrollViewer>
+	</Border>
+</UserControl>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Favourite Posts – Reddit 2</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous" />
+
+  <link rel="stylesheet" href="reddit2.css" />
+
+  <!-- Apply saved theme before first paint -->
+  <script>
+  (function(){var d={bg:'#1e1e2e',fg:'#cdd6f4',muted:'#6c7086',card:'#181825',border:'#313244',accent:'#cba6f7',accent2:'#89b4fa',overlay:'#313244'},l={bg:'#eff1f5',fg:'#4c4f69',muted:'#9ca0b0',card:'#e6e9ef',border:'#ccd0da',accent:'#8839ef',accent2:'#1e66f5',overlay:'#dce0e8'},t=localStorage.getItem('theme')==='light'?l:d,s=document.documentElement.style;s.setProperty('--bg',t.bg);s.setProperty('--fg',t.fg);s.setProperty('--muted',t.muted);s.setProperty('--card',t.card);s.setProperty('--border',t.border);s.setProperty('--accent',t.accent);s.setProperty('--accent2',t.accent2);s.setProperty('--overlay',t.overlay);})();
+  </script>
+</head>
+
+<body style="background:var(--bg);color:var(--fg);min-height:100vh">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container-fluid px-4 py-2">
+      <a class="navbar-brand text-decoration-none me-3" href="index.html">Reddit 2</a>
+      <div class="ms-auto d-flex gap-2 align-items-center">
+        <span id="navbar-username" class="text-muted small" data-show-when="authed" style="display:none"></span>
+        <a class="btn btn-sm btn-outline-light" href="login.html" data-show-when="guest">Login</a>
+        <button class="btn btn-sm btn-outline-light" id="logout-btn" type="button" data-show-when="authed" style="display:none">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4 my-4">
+    <div class="row g-4">
+
+      <!-- Sidebar -->
+      <aside class="col-12 col-lg-3 order-2 order-lg-1">
+        <nav>
+          <p class="sidebar-heading">🔗 Links</p>
+          <ul class="list-group">
+            <li class="list-group-item"><a href="index.html" class="sidebar-link">🏠 Back to Feed</a></li>
+            <li class="list-group-item"><a href="favourites.html" class="sidebar-link active">❤ Favourite Posts</a></li>
+            <li class="list-group-item"><a href="settings.html" class="sidebar-link">⚙ Settings</a></li>
+            <li class="list-group-item"><a href="about.html" class="sidebar-link">ℹ About Us</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main content -->
+      <main class="col-12 col-lg-6 order-1 order-lg-2">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <h4 class="mb-0" style="font-weight:800">❤ Favourite Posts</h4>
+          <span id="fav-count" class="badge" style="background:var(--accent);color:#fff;display:none"></span>
+        </div>
+
+        <!-- States -->
+        <div id="fav-loading" class="card mb-3">
+          <div class="card-body text-center py-4 text-muted">Loading your favourites…</div>
+        </div>
+        <div id="fav-empty" class="card mb-3" style="display:none">
+          <div class="card-body text-center py-5">
+            <div style="font-size:2.5rem">🤍</div>
+            <p class="text-muted mt-2 mb-0">You haven't saved any posts yet.<br/>Hit the <strong>♡ Save</strong> button on any post to add it here.</p>
+            <a href="index.html" class="btn btn-primary btn-sm mt-3">Browse Feed</a>
+          </div>
+        </div>
+        <div id="fav-error" class="card mb-3" style="display:none">
+          <div class="card-body text-center py-4 text-danger">Could not load favourites. Please try again.</div>
+        </div>
+
+        <!-- Post list -->
+        <div id="fav-list"></div>
+      </main>
+
+      <!-- Right sidebar placeholder -->
+      <aside class="col-12 col-lg-3 order-3"></aside>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <script src="themeSlider.js"></script>
+  <script type="module" src="favourites.js"></script>
+</body>
+</html>

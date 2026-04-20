@@ -1,0 +1,120 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MobileVersion.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="700"
+             x:Class="MobileVersion.LikedPostsPage"
+             x:DataType="vm:LikedPostsVM">
+
+    <!-- UNIQUE FOREST EMERALD GRADIENT BACKGROUND -->
+    <UserControl.Background>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Offset="0.0" Color="#0B2010" />
+            <GradientStop Offset="1.0" Color="#1B3A24" />
+        </LinearGradientBrush>
+    </UserControl.Background>
+
+    <UserControl.Styles>
+        <!-- Modern Emerald Card Style -->
+        <Style Selector="Border.LikeCard">
+            <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#202ECC71"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BoxShadow" Value="0 6 15 0 #40000000"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" Easing="BackEaseOut"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.CardWrapper TextBlock">
+            <Setter Property="Foreground" Value="#ECF0F1" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- MODERN MINIMALIST HEADER -->
+        <Border Grid.Row="0" Padding="20" Background="#10000000">
+            <Grid ColumnDefinitions="Auto, *">
+                <Button Command="{Binding CloseCommand}" 
+                        Background="#2ECC71" 
+                        CornerRadius="20"
+                        Width="40" Height="40"
+                        Padding="0">
+                    <Path Data="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" 
+                          Fill="White" 
+                          Width="18" Height="18"
+                          Stretch="Uniform" 
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"/>
+                </Button>
+                
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="20,0">
+                    <TextBlock Text="COMMUNITY APPROVAL" 
+                               FontSize="9" 
+                               FontWeight="Heavy" 
+                               Foreground="#802ECC71" 
+                               LetterSpacing="3"/>
+                    <TextBlock Text="{Binding Username}" 
+                               FontSize="22" 
+                               FontWeight="SemiBold" 
+                               Foreground="White"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- LIKED POSTS LIST -->
+        <ScrollViewer Grid.Row="1" Name="PostsScroller" ScrollChanged="ScrollChanged">
+            <ItemsControl ItemsSource="{Binding LikedPosts}" Margin="20">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PostVM">
+                        <Button Classes="CardWrapper"
+                                Background="Transparent" 
+                                Padding="0" 
+                                BorderThickness="0"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding SelectCommand}">
+                            <Border Classes="LikeCard" 
+                                    Margin="0,0,0,15" 
+                                    Padding="18" 
+                                    CornerRadius="12">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0" Spacing="4">
+                                        <TextBlock Text="{Binding Post.Title}" 
+                                                   FontWeight="Bold" 
+                                                   FontSize="16"/>
+                                        <TextBlock Text="{Binding Post.Content}"
+                                                   TextWrapping="Wrap" 
+                                                   MaxLines="2"
+                                                   Opacity="0.75"
+                                                   FontSize="12"/>
+                                        
+                                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                            <Border Background="#2ECC71" CornerRadius="10" Padding="8,2">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="👍" FontWeight="Normal" FontSize="10" Foreground="White" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Votes}" FontSize="10" Foreground="White" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    
+                                    <!-- Soft Background Icon -->
+                                    <TextBlock Grid.Column="1" 
+                                               Text="▲" 
+                                               FontSize="24" 
+                                               FontWeight="Normal"
+                                               Foreground="#2ECC71" 
+                                               VerticalAlignment="Top"/>
+                                </Grid>
+                            </Border>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

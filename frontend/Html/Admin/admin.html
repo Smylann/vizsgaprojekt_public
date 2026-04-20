@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel – Reddit 2</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous" />
+
+  <link rel="stylesheet" href="reddit2.css" />
+
+  <!-- Apply saved theme before first paint -->
+  <script>
+  (function(){var d={bg:'#1e1e2e',fg:'#cdd6f4',muted:'#6c7086',card:'#181825',border:'#313244',accent:'#cba6f7',accent2:'#89b4fa',overlay:'#313244'},l={bg:'#eff1f5',fg:'#4c4f69',muted:'#9ca0b0',card:'#e6e9ef',border:'#ccd0da',accent:'#8839ef',accent2:'#1e66f5',overlay:'#dce0e8'},t=localStorage.getItem('theme')==='light'?l:d,s=document.documentElement.style;s.setProperty('--bg',t.bg);s.setProperty('--fg',t.fg);s.setProperty('--muted',t.muted);s.setProperty('--card',t.card);s.setProperty('--border',t.border);s.setProperty('--accent',t.accent);s.setProperty('--accent2',t.accent2);s.setProperty('--overlay',t.overlay);})();
+  </script>
+
+  <style>
+    /* Admin panel overrides */
+    .admin-stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .admin-stat-card .stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .admin-stat-card .stat-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .admin-table-wrapper {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .admin-table-wrapper table {
+      margin-bottom: 0;
+      color: var(--fg);
+    }
+    .admin-table-wrapper thead th {
+      background: var(--overlay);
+      border-color: var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    .admin-table-wrapper tbody tr {
+      border-color: var(--border);
+    }
+    .admin-table-wrapper tbody td {
+      border-color: var(--border);
+      vertical-align: middle;
+    }
+    .admin-table-wrapper tbody tr:hover {
+      background: var(--overlay) !important;
+    }
+    .badge-admin { background-color: var(--accent); color: #fff; }
+    .badge-user  { background-color: var(--muted);  color: #fff; }
+    .admin-search {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      border-radius: 8px;
+    }
+    .admin-search:focus { outline: none; box-shadow: 0 0 0 2px var(--accent); border-color: var(--accent); }
+    .admin-search::placeholder { color: var(--muted); }
+    .nav-tabs { border-color: var(--border); }
+    .nav-tabs .nav-link { color: var(--muted); border-color: transparent; }
+    .nav-tabs .nav-link:hover { color: var(--fg); border-color: transparent; }
+    .nav-tabs .nav-link.active { color: var(--accent); background: var(--card); border-color: var(--border) var(--border) var(--card); }
+    .tab-content { border: 1px solid var(--border); border-top: none; border-radius: 0 0 12px 12px; background: transparent; padding: 1.5rem; }
+    .comment-row td { font-size: 0.9rem; background: var(--bg) !important; }
+    .comment-row td:first-child { padding-left: 2.5rem; }
+    .accordion-button { background: var(--overlay) !important; color: var(--fg) !important; }
+    .accordion-button:not(.collapsed) { color: var(--accent) !important; box-shadow: none; }
+    .accordion-body { background: var(--card); color: var(--fg); }
+    .accordion-item { border-color: var(--border); background: var(--card); }
+    .btn-action { padding: 0.2rem 0.5rem; font-size: 0.78rem; }
+    .truncate { max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+    .admin-toast { padding: 0.75rem 1.25rem; border-radius: 8px; color: #fff; font-size: 0.9rem; opacity: 1; transition: opacity 0.4s; min-width: 220px; }
+    .admin-toast.success { background: #198754; }
+    .admin-toast.danger  { background: #dc3545; }
+    .admin-toast.info    { background: #0d6efd; }
+    .rename-input { background: var(--bg); border: 1px solid var(--border); color: var(--fg); border-radius: 6px; padding: 0.2rem 0.5rem; font-size: 0.85rem; width: 130px; }
+    .rename-input:focus { outline: none; border-color: var(--accent); }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+    .spinner-wrap { display: flex; justify-content: center; align-items: center; min-height: 120px; }
+  </style>
+</head>
+
+<body style="background:var(--bg);color:var(--fg);min-height:100vh">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container-fluid px-4 py-2">
+      <a class="navbar-brand text-decoration-none me-3" href="index.html">Reddit 2</a>
+      <span class="badge bg-danger ms-2">Admin Panel</span>
+      <div class="ms-auto d-flex gap-2 align-items-center">
+        <span id="admin-navbar-user" class="text-muted small"></span>
+        <a class="btn btn-sm btn-outline-light" href="index.html">← Back to Site</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="container-fluid px-4 my-4">
+
+    <!-- Access denied state -->
+    <div id="admin-guard" style="display:none" class="text-center py-5">
+      <div class="admin-stat-card d-inline-block px-5 py-4">
+        <div style="font-size:3rem">🚫</div>
+        <h4 class="mt-3" style="color:var(--fg)">Access Denied</h4>
+        <p style="color:var(--muted)">You must be an Admin to view this page.</p>
+        <a href="index.html" class="btn btn-primary">Go Home</a>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div id="admin-loading" class="spinner-wrap">
+      <div class="spinner-border" style="color:var(--accent)" role="status">
+        <span class="visually-hidden">Loading…</span>
+      </div>
+    </div>
+
+    <!-- Admin panel -->
+    <div id="admin-panel" style="display:none">
+      <div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
+        <h2 class="mb-0" style="font-weight:800">⚙ Admin Panel</h2>
+        <span class="text-muted small">Logged in as <strong id="admin-user-display"></strong></span>
+        <button id="admin-refresh-btn" class="btn btn-sm btn-outline-secondary ms-auto" title="Reload all data">↺ Refresh</button>
+      </div>
+
+      <!-- Tabs -->
+      <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-overview"   type="button">📊 Overview</button></li>
+        <li class="nav-item"><button class="nav-link"        data-bs-toggle="tab" data-bs-target="#tab-users"     type="button">👥 Users</button></li>
+        <li class="nav-item"><button class="nav-link"        data-bs-toggle="tab" data-bs-target="#tab-posts"     type="button">📝 Posts</button></li>
+        <li class="nav-item"><button class="nav-link"        data-bs-toggle="tab" data-bs-target="#tab-comments"  type="button">💬 Comments</button></li>
+        <li class="nav-item"><button class="nav-link"        data-bs-toggle="tab" data-bs-target="#tab-categories"type="button">📂 Categories</button></li>
+        <li class="nav-item"><button class="nav-link"        data-bs-toggle="tab" data-bs-target="#tab-reports"   type="button">🚩 Reports</button></li>
+      </ul>
+
+      <div class="tab-content" id="adminTabContent">
+
+        <!-- ─── OVERVIEW ─── -->
+        <div class="tab-pane fade show active" id="tab-overview" role="tabpanel">
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+              <div class="admin-stat-card">
+                <div class="stat-value" id="stat-users">–</div>
+                <div class="stat-label">Total Users</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="admin-stat-card">
+                <div class="stat-value" id="stat-posts">–</div>
+                <div class="stat-label">Total Posts</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="admin-stat-card">
+                <div class="stat-value" id="stat-cats">–</div>
+                <div class="stat-label">Categories</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="admin-stat-card">
+                <div class="stat-value" id="stat-votes">–</div>
+                <div class="stat-label">Total Votes</div>
+              </div>
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-4">
+              <div class="admin-stat-card">
+                <div class="stat-value" id="stat-admins">–</div>
+                <div class="stat-label">Admins</div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="admin-stat-card">
+                <div class="stat-value" id="stat-top-post-votes">–</div>
+                <div class="stat-label">Highest-voted Post</div>
+                <div class="mt-1" style="font-size:0.8rem;color:var(--muted)" id="stat-top-post-title"></div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="admin-stat-card">
+                <div class="stat-value" id="stat-negative-posts">–</div>
+                <div class="stat-label">Negative-score Posts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── USERS ─── -->
+        <div class="tab-pane fade" id="tab-users" role="tabpanel">
+          <div class="section-header">
+            <h5 class="mb-0">All Users</h5>
+            <input type="search" id="user-search" class="admin-search form-control" style="max-width:260px" placeholder="🔎 Search by name or role…" />
+          </div>
+          <div id="users-loading" class="spinner-wrap" style="display:none">
+            <div class="spinner-border spinner-border-sm" style="color:var(--accent)"></div>
+          </div>
+          <div class="admin-table-wrapper">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th style="width:60px">ID</th>
+                  <th>Username</th>
+                  <th style="width:110px">Role</th>
+                  <th style="width:320px">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ─── POSTS ─── -->
+        <div class="tab-pane fade" id="tab-posts" role="tabpanel">
+          <div class="section-header">
+            <h5 class="mb-0">All Posts</h5>
+            <input type="search" id="post-search" class="admin-search form-control" style="max-width:300px" placeholder="🔎 Search by title…" />
+          </div>
+          <div class="admin-table-wrapper">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th style="width:60px">ID</th>
+                  <th>Title</th>
+                  <th style="width:80px">User ID</th>
+                  <th style="width:80px">Votes</th>
+                  <th style="width:160px">Created</th>
+                  <th style="width:90px">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="posts-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ─── COMMENTS ─── -->
+        <div class="tab-pane fade" id="tab-comments" role="tabpanel">
+          <div class="section-header">
+            <h5 class="mb-0">Browse Comments by Post</h5>
+            <input type="search" id="comment-post-search" class="admin-search form-control" style="max-width:300px" placeholder="🔎 Filter posts…" />
+          </div>
+          <div class="accordion" id="comments-accordion"></div>
+          <div id="comments-empty" class="text-muted text-center py-4" style="display:none">No posts found.</div>
+        </div>
+
+        <!-- ─── CATEGORIES ─── -->
+        <div class="tab-pane fade" id="tab-categories" role="tabpanel">
+          <div class="section-header">
+            <h5 class="mb-0">Categories</h5>
+          </div>
+          <form id="cat-create-form" class="d-flex gap-2 mb-3" style="max-width:420px">
+            <input type="text" id="cat-new-name" class="admin-search form-control" placeholder="New category name…" required maxlength="80" />
+            <button type="submit" class="btn btn-primary btn-sm px-3">+ Add</button>
+          </form>
+          <div class="admin-table-wrapper">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th style="width:70px">ID</th>
+                  <th>Name</th>
+                  <th style="width:90px">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="cats-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ─── REPORTS ─── -->
+        <div class="tab-pane fade" id="tab-reports" role="tabpanel">
+          <div class="section-header">
+            <h5 class="mb-0">Reported Posts</h5>
+            <input type="search" id="report-search" class="admin-search form-control" style="max-width:320px" placeholder="🔎 Search reports by title, reason, or user…" />
+          </div>
+          <div class="admin-table-wrapper">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th style="width:70px">ID</th>
+                  <th style="width:80px">Post</th>
+                  <th>Post Title</th>
+                  <th style="width:110px">Reporter</th>
+                  <th>Reason</th>
+                  <th style="width:150px">Created</th>
+                  <th style="width:170px">Status</th>
+                  <th style="width:180px">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="reports-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /tab-content -->
+    </div><!-- /admin-panel -->
+  </div><!-- /container -->
+
+  <!-- Rename modal -->
+  <div class="modal fade" id="renameModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" style="background:var(--card);color:var(--fg);border-color:var(--border)">
+        <div class="modal-header" style="border-color:var(--border)">
+          <h5 class="modal-title">Rename User</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="rename-input" class="admin-search form-control" placeholder="New username…" maxlength="64" />
+          <input type="hidden" id="rename-user-id" />
+        </div>
+        <div class="modal-footer" style="border-color:var(--border)">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" id="rename-confirm-btn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm delete modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" style="background:var(--card);color:var(--fg);border-color:var(--border)">
+        <div class="modal-header border-danger" style="border-color:var(--border)">
+          <h5 class="modal-title text-danger">Confirm Delete</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p id="delete-modal-message">Are you sure?</p>
+        </div>
+        <div class="modal-footer" style="border-color:var(--border)">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger btn-sm" id="delete-confirm-btn">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
